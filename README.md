@@ -90,7 +90,7 @@ streamlit run app.py
 ```
 
 All processed data files are already committed to `data/`. The app runs immediately without any additional preprocessing step.
-##Demo Link https://parkingiq-qim7699grertzukjar3gv3.streamlit.app/
+## Demo Link https://parkingiq-qim7699grertzukjar3gv3.streamlit.app/
 
 To regenerate the data files from the raw enforcement CSV (requires the source dataset):
 
