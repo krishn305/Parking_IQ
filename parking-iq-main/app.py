@@ -92,26 +92,35 @@ div[data-testid="stSidebar"] { background: #070913; }
 """, unsafe_allow_html=True)
 
 # ── LOAD DATA & ML MODEL ──────────────────────────────────
+# ── LOAD DATA & ML MODEL ──────────────────────────────────
 @st.cache_data
 def load_data():
-   cdf = pd.read_csv(DATA_DIR / "cluster_stats.csv")
-stn = pd.read_csv(DATA_DIR / "station_summary.csv")
-habitual = pd.read_csv(DATA_DIR / "habitual_offenders.csv")
-hourly = pd.read_csv(DATA_DIR / "hourly_by_station.csv")
+    cdf = pd.read_csv(DATA_DIR / "cluster_stats.csv")
+    stn = pd.read_csv(DATA_DIR / "station_summary.csv")
+    habitual = pd.read_csv(DATA_DIR / "habitual_offenders.csv")
+    hourly = pd.read_csv(DATA_DIR / "hourly_by_station.csv")
 
-with open(DATA_DIR / "summary.json") as f:
+    with open(DATA_DIR / "summary.json", "r") as f:
         summary = json.load(f)
+
     return cdf, stn, habitual, hourly, summary
+
 
 @st.cache_resource
 def load_ml_model():
     model = None
     meta = None
-    if (DATA_DIR / "predictor_model.pkl").exists() and  (DATA_DIR / "predictor_metadata.json").exists():
-        with open(DATA_DIR / "predictor_model.pkl", "rb") as f:
+
+    model_file = DATA_DIR / "predictor_model.pkl"
+    meta_file = DATA_DIR / "predictor_metadata.json"
+
+    if model_file.exists() and meta_file.exists():
+        with open(model_file, "rb") as f:
             model = pickle.load(f)
-        with open('data/predictor_metadata.json', 'r') as f:
+
+        with open(meta_file, "r") as f:
             meta = json.load(f)
+
     return model, meta
 
 try:
