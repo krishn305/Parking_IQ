@@ -18,6 +18,11 @@ import pickle
 import os
 from datetime import datetime, timedelta
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+
 # ── PAGE CONFIG ───────────────────────────────────────────
 st.set_page_config(
     page_title="ParkingIQ — Bengaluru Traffic Intelligence",
@@ -89,11 +94,12 @@ div[data-testid="stSidebar"] { background: #070913; }
 # ── LOAD DATA & ML MODEL ──────────────────────────────────
 @st.cache_data
 def load_data():
-    cdf      = pd.read_csv('data/cluster_stats.csv')
-    stn      = pd.read_csv('data/station_summary.csv')
-    habitual = pd.read_csv('data/habitual_offenders.csv')
-    hourly   = pd.read_csv('data/hourly_by_station.csv')
-    with open('data/summary.json') as f:
+   cdf = pd.read_csv(DATA_DIR / "cluster_stats.csv")
+stn = pd.read_csv(DATA_DIR / "station_summary.csv")
+habitual = pd.read_csv(DATA_DIR / "habitual_offenders.csv")
+hourly = pd.read_csv(DATA_DIR / "hourly_by_station.csv")
+
+with open(DATA_DIR / "summary.json") as f:
         summary = json.load(f)
     return cdf, stn, habitual, hourly, summary
 
@@ -101,8 +107,8 @@ def load_data():
 def load_ml_model():
     model = None
     meta = None
-    if os.path.exists('data/predictor_model.pkl') and os.path.exists('data/predictor_metadata.json'):
-        with open('data/predictor_model.pkl', 'rb') as f:
+    if (DATA_DIR / "predictor_model.pkl").exists() and  (DATA_DIR / "predictor_metadata.json").exists():
+        with open(DATA_DIR / "predictor_model.pkl", "rb") as f:
             model = pickle.load(f)
         with open('data/predictor_metadata.json', 'r') as f:
             meta = json.load(f)
